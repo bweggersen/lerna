@@ -35,7 +35,7 @@
     "@lerna/command": "file:../../core/command",
     "@lerna/package-graph": "file:../../core/package-graph",
     "@lerna/symlink-dependencies": "file:../../utils/symlink-dependencies",
-    "p-map": "^1.2.0",
+    "p-map": "bweggersen/p-map#bewegger/pausable-thread",
     "slash": "^1.0.0"
   }
 }
