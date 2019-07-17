@@ -36,8 +36,8 @@ function runTopologically(packages, runner, opts) {
     const returnValues = [];
 
     const queueNextAvailablePackages = () =>
-      graph.getAvailablePackages().forEach(({ pkg, name }) => {
-        graph.markAsTaken(name);
+      graph.getAvailablePackages().forEach(({ pkg }) => {
+        graph.markAsTaken(pkg);
 
         queue
           .add(() =>

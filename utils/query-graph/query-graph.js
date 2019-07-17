@@ -22,6 +22,9 @@ class QueryGraph {
   constructor(packages, opts) {
     const options = QueryGraphConfig(opts);
 
+    // Keeps track of packages that are in progress
+    this.inProgress = [];
+
     // Create dependency graph
     this.graph = new PackageGraph(packages, options.graphType);
 
@@ -59,6 +62,10 @@ class QueryGraph {
     );
   }
 
+  _noPackagesInProgress() {
+    return this.inProgress.length === 0;
+  }
+
   getAvailablePackages() {
     // Get the next leaf nodes
     const availablePackages = this._getNextLeaf();
@@ -68,18 +75,22 @@ class QueryGraph {
     }
 
     // Or, get the next cyclical packages
-    if (this.cyclePaths.size && this._onlyCyclesLeft()) {
+    if (this.cyclePaths.size && (this._onlyCyclesLeft() || this._noPackagesInProgress())) {
       return this._getNextCycle();
     }
 
     return [];
   }
 
-  markAsTaken(name) {
+  markAsTaken({ name }) {
+    this.inProgress.push(name);
     this.graph.delete(name);
   }
 
   markAsDone(candidateNode) {
+    const name = candidateNode.name;
+    this.inProgress = this.inProgress.filter(e => e !== name);
+
     this.graph.remove(candidateNode);
   }
 }

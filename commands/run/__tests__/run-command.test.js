@@ -245,5 +245,18 @@ describe("RunCommand", () => {
 
       expect.hasAssertions();
     });
+
+    it("runs scripts on cycles with common parent", async () => {
+      const testDir = await initFixture("cycles-with-common-parent");
+
+      await lernaRun(testDir)("env");
+
+      expect(output.logged().split("\n")).toEqual([
+        "package-2",
+        "package-cycle-1",
+        "package-cycle-2",
+        "package-1",
+      ]);
+    });
   });
 });
